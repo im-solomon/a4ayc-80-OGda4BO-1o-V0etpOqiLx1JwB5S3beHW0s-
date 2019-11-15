@@ -1,17 +1,22 @@
 package generated;
+import org.antlr.v4.gui.Trees;
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.tree.ParseTree;
+
+import generated.WHILEParser.ProgramContext;
+
 import java.util.*;
 
-class StateMap {															//state ì €ì¥ í´ë˜ìŠ¤
+class StateMap {																				//state ÀúÀå Å¬·¡½º
 	private static HashMap<String, Integer> stateMapVar = new HashMap<String, Integer>();		
-	public StateMap(){														//state ì´ˆê¸°ê°’
+	public StateMap(){																			//state ÃÊ±â°ª
 		stateMapVar.put("x", 7);
 		stateMapVar.put("y", 1);
 	}
-	public void SetState(String strVar, Integer intVar) {										//state key value ì„¸íŒ…
+	public void SetState(String strVar, Integer intVar) {										//state key value ¼¼ÆÃ
 		stateMapVar.put(strVar, intVar);
 	}
-	public HashMap<String, Integer> GetStateMapObject(){										//state ê°ì²´ ë¦¬í„´
+	public HashMap<String, Integer> GetStateMapObject(){										//state °´Ã¼ ¸®ÅÏ
 		return stateMapVar;
 	}
 }
@@ -19,43 +24,48 @@ class StateMap {															//state ì €ì¥ í´ë˜ìŠ¤
 public class Interpreter {	
     
 	public static void main(String[] args) throws Exception {
-    	StateMap vars =  new StateMap();												//state ê°ì²´ ìƒì„±
-    	System.out.println("ê³„ì‚°ê¸° ì‹œì‘");
+    	StateMap vars =  new StateMap();																//state °´Ã¼ »ı¼º
+    	System.out.println("°è»ê±â ½ÃÀÛ");
     	while(true) {	
-    		System.out.println("ë²ˆí˜¸ ì„ íƒ,   1.State ì¶œë ¥   2.State ì…ë ¥   3.ìˆ˜ì‹ê³„ì‚°   4.ì¢…ë£Œ");
+    		System.out.println("¹øÈ£ ¼±ÅÃ,   1.State Ãâ·Â   2.State ÀÔ·Â   3.¼ö½Ä°è»ê   4.Á¾·á");
     	
     		int num = new Scanner(System.in).nextInt();	
     		if(num == 1) {
-    			System.out.println("í˜„ì¬ States:");
-    			for(String key : vars.GetStateMapObject().keySet()) {								//ëª¨ë“  state key value ì¶œë ¥
+    			System.out.println("ÇöÀç States:");
+    			for(String key : vars.GetStateMapObject().keySet()) {									//¸ğµç state key value Ãâ·Â
     				System.out.println("key=value: "+key + " = "+vars.GetStateMapObject().get(key));	
     			}
     			
     			System.out.println();
-    		}else if(num == 2){													//state ìƒì„± ë° substitute
+    		}else if(num == 2){																			//state »ı¼º ¹× substitute
     			
-    			System.out.println("State ì…ë ¥:");
+    			System.out.println("State ÀÔ·Â:");
     			System.out.println("State key:");
     			String key = new Scanner(System.in).nextLine();
     			System.out.println("State value:");
     			Integer value = new Scanner(System.in).nextInt();
     			vars.SetState(key, value);
     			
-    		}else if(num == 3){													//ìˆ˜ì‹ ê³„ì‚°
-    			System.out.println("ìˆ˜ì‹ ì…ë ¥:");
-    			CharStream input = CharStreams.fromString(new Scanner(System.in).nextLine());					//ìˆ˜ì‹ì„ ë¬¸ìì—´ë¡œ ë°›ìŒ
-    			WHILELexer lexer = new WHILELexer(input);									//ë¬¸ìì—´ì„ lexer rule ê¸°ì¤€ìœ¼ë¡œ ë‚˜ëˆ”
-    			CommonTokenStream tokens = new CommonTokenStream(lexer);							//ì˜ë¯¸ìˆëŠ” ë‹¨ì–´ë¥¼ ê¸°ì¤€ ìµœì†Œë‹¨ìœ„ë¡œ ë‚˜ëˆ”				
-    			WHILEParser parser = new WHILEParser(tokens);									//parser rule ê¸°ì¤€ìœ¼ë¡œ astë¥¼ ìƒì„±í•œë‹¤
-            
-    			parser.memory.putAll(vars.GetStateMapObject());									//parserì˜ ë©¤ë²„ê°ì²´ì— state ê°ì²´ ì „ë‹¬
+    		}else if(num == 3){																			//¼ö½Ä °è»ê
+    			System.out.println("¼ö½Ä ÀÔ·Â:");
+    			CharStream input = CharStreams.fromString(new Scanner(System.in).nextLine());			//¼ö½ÄÀ» ¹®ÀÚ¿­·Î ¹ŞÀ½
+    			WHILELexer lexer = new WHILELexer(input);												//¹®ÀÚ¿­À» lexer rule ±âÁØÀ¸·Î ³ª´®
+    			CommonTokenStream tokens = new CommonTokenStream(lexer);								//ÀÇ¹ÌÀÖ´Â ´Ü¾î¸¦ ±âÁØ ÃÖ¼Ò´ÜÀ§·Î ³ª´®				
+    			WHILEParser parser = new WHILEParser(tokens);											//parser rule ±âÁØÀ¸·Î ast¸¦ »ı¼ºÇÑ´Ù
+    			parser.memory.putAll(vars.GetStateMapObject());											//parserÀÇ ¸â¹ö°´Ã¼¿¡ state °´Ã¼ Àü´Ş
     			
-    			System.out.println(parser.program().aexpr().sv);								//ìµœì¢… ê²°ê³¼ì¸ ë¦¬í„´ ê°’ ì¶œë ¥
+    			ProgramContext parse_program= parser.program();										//ÀÔ·ÂµÈ ±¸¹® ÇØ¼®
+    			System.out.println(parse_program.sv);												//ÃÖÁ¾ ¸®ÅÏ °ª Ãâ·Â
+    			ParseTree tree = parse_program;														//ÀÔ·ÂµÈ ¼ö½ÄÀÌ ÇØ¼® µÇ´Â Æ®¸® »ı¼º
+    			Trees.inspect(tree,parser);															//°¡½ÃÀûÀÎ Æ®¸® »ı¼º
     			System.out.println();
     			
-    		}else {
+    		}else if(num == 4) {
+    			System.out.println("The End of Calc.");
     			break;
-    		}  	
+    		}else{
+    			System.out.println("Incorrect number.");
+    		}
     	
     	}
     	
