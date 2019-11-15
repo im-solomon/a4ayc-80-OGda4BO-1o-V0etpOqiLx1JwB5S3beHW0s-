@@ -3,45 +3,45 @@
  */
 grammar WHILE;
 
-@header {											//ÀÚµ¿ »ı¼ºµÇ´Â ºĞ¼®±â »ı¼º Æú´õ
+@header {										//ìë™ ìƒì„±ë˜ëŠ” ë¶„ì„ê¸° ìƒì„± í´ë”
 package generated;
 }
 
-@parser::members{									//antlr¾È¿¡¼­ »ç¿ëµÉ ÀÚ¹Ù °´Ã¼
+@parser::members{									//antlrì•ˆì—ì„œ ì‚¬ìš©ë  ìë°” ê°ì²´
 	public java.util.HashMap<String, Integer> memory = new java.util.HashMap<String, Integer>();
 	
 }
 
-																				//parser rule ½ÃÀÛ, lexer rule·Î ³ª´²Áø ÅäÅ«µéÀÇ ÀÇ¹Ì ÆÄ¾Ç
-program returns [int sv]														//programÀÇ ¸®ÅÏ Å¸ÀÔ Á¤ÀÇ
-	: 	result = additionExp {$sv = $result.sv;}								//¸ğµç ¼ö½ÄÀÌ °è»ê µÈ ¸®ÅÏ °ª ¹Ş±â
+											//parser rule ì‹œì‘, lexer ruleë¡œ ë‚˜ëˆ ì§„ í† í°ë“¤ì˜ ì˜ë¯¸ íŒŒì•…
+program returns [int sv]								//programì˜ ë¦¬í„´ íƒ€ì… ì •ì˜
+	: 	result = additionExp {$sv = $result.sv;}				//êµ¬ë¬¸ ë¶„ì„ ì‹œì‘ ë° ëª¨ë“  ê³„ì‚°ì´ ëë‚˜ê³  ë¦¬í„´ ê°’ ë°›ê¸°
 	;
-additionExp returns [int sv]													//+ - ¹®ÀÚ¿­ÀÇ ÀÇ¹Ì Á¤ÀÇ, ¸®ÅÏ Å¸ÀÔ Á¤ÀÇ
-	: 	a1 = multiplyExp		{$sv = $a1.sv;}									//multiplyExp ±ÔÄ¢ ¸ÕÀú ¼öÇà ÈÄ ¸®ÅÏ °ª¿¡ ´ëÇØ + - Á¤ÀÇ
-		(	'+' a2=multiplyExp 	{$sv += $a2.sv;} 
-        | 	'-' a2=multiplyExp 	{$sv -= $a2.sv;}	
-		)*																		//zero or more
+additionExp returns [int sv]								//+ - ë¬¸ìì—´ì˜ ì˜ë¯¸ ì •ì˜, ë¦¬í„´ íƒ€ì… ì •ì˜
+	: 	a1 = multiplyExp	{$sv = $a1.sv;}					//í˜„ì¬ í† í°ì´ * / ê¸°í˜¸ê°€ ìˆëŠ”ì§€ ë¶„ì„ í›„ ì—°ì‚°ìì— ë§ê²Œ í• ë‹¹í•¨
+		('+' a2=multiplyExp 	{$sv += $a2.sv;} 				
+        	| '-' a2=multiplyExp 	{$sv -= $a2.sv;}				
+		)*									//zero or more
 	;
 	
-multiplyExp returns [int sv]													// * / ¹®ÀÚ¿­ÀÇ ÀÇ¹Ì Á¤ÀÇ, ¸®ÅÏ Å¸ÀÔ Á¤ÀÇ
-	:   m1 = atomExp       {$sv =  $m1.sv;}										// »çÄ¢¿¬»ê ¿ÜÀÇ ¹®ÀÚ¿¡ ´ëÇÑ ÇØ¼®ÀÌ ¼±ÇàµÇ¾î¾ß ÇÔ
-        ( '*' m2=atomExp {$sv *= $m2.sv;} 
-        | '/' m2=atomExp {$sv /= $m2.sv;}
-        )*  																	//zero or more
+multiplyExp returns [int sv]								// * / ë¬¸ìì—´ì˜ ì˜ë¯¸ ì •ì˜, ë¦¬í„´ íƒ€ì… ì •ì˜
+	:   m1 = atomExp       	{$sv =  $m1.sv;}					// í† í°ì— ì‚¬ì¹™ì—°ì‚°ì™¸ ì›ìë‹¨ìœ„ ê°’ì´ ìˆëŠ”ì§€ ë¶„ì„ í›„ ì—°ì‚°ìì— ë§ê²Œ í• ë‹¹í•¨ 
+        ( '*' m2=atomExp 	{$sv *= $m2.sv;} 
+        | '/' m2=atomExp 	{$sv /= $m2.sv;}
+        )*  										//zero or more
 	;
-atomExp returns [int sv]														//»çÄ¢¿¬»ê ¿ÜÀÇ ¹®ÀÚ¿¡ ´ëÇÑ ±¸¹® ÇØ¼®
-	: 	n=Number				{$sv = Integer.parseInt($n.text);}				//ÅäÅ«ÀÌ Number¶ó¸é Á¤¼ö·Î º¯È¯
-	|	i=Identifier			{$sv = memory.get($i.text);}					//ÅäÅ«ÀÌ Identifier¶ó¸é State¿¡¼­ ÂüÁ¶ÇÔ
-	|	'(' exp=additionExp ')'	{$sv = $exp.sv;}								//°ıÈ£ ¹ß°ßµÇ¸é additionExp ±ÔÄ¢¿¡¼­ ´Ù½Ã ½ÃÀÛ(¸®Ä¿Á¯)
+atomExp returns [int sv]								//ì‚¬ì¹™ì—°ì‚° ì™¸ì˜ ë¬¸ìì— ëŒ€í•œ êµ¬ë¬¸ í•´ì„
+	: 	n=Number		{$sv = Integer.parseInt($n.text);}		//í† í°ì´ Numberë¼ë©´ ì •ìˆ˜ë¡œ ë³€í™˜
+	|	i=Identifier		{$sv = memory.get($i.text);}			//í† í°ì´ Identifierë¼ë©´ Stateì—ì„œ ì°¸ì¡°í•¨
+	|	'(' exp=additionExp ')'	{$sv = $exp.sv;}				//ê´„í˜¸ ë°œê²¬ë˜ë©´ additionExp ê·œì¹™ì—ì„œ ë‹¤ì‹œ ì‹œì‘(recursion)
 	;
 
-																				//lexer rule ½ÃÀÛ, ÀÇ¹ÌÀÖ´Â ´ÜÀ§·Î ³ª´©´Â ±ÔÄ¢
+											//lexer rule ì‹œì‘, ì˜ë¯¸ìˆëŠ” ë‹¨ìœ„ë¡œ ë‚˜ëˆ„ëŠ” ê·œì¹™
 Identifier
-	:	('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* 	//ÇÑÀÚ¸® ÀÌ»óÀÇ º¯¼ö, ¾ÕÀÚ¸® ´ë¼Ò¹®ÀÚ/¾ğ´õ¹Ù¸¸ Çã¿ë, µŞÀÚ¸®ºÎÅÍ´Â ¼ıÀÚ±îÁö Çã¿ë(zero or more)
+	:	('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* 	//í•œìë¦¬ ì´ìƒì˜ ë³€ìˆ˜, ì•ìë¦¬ ëŒ€ì†Œë¬¸ì/ì–¸ë”ë°”ë§Œ í—ˆìš©, ë’·ìë¦¬ë¶€í„°ëŠ” ìˆ«ìê¹Œì§€ í—ˆìš©(zero or more)
 	;
 Number
-	:	('0'..'9')+ 															//ÇÑÀÚ¸® ÀÌ»óÀÇ Á¤¼ö¸¸ Çã¿ë (one or more)
+	:	('0'..'9')+ 								//í•œìë¦¬ ì´ìƒì˜ ì •ìˆ˜ë§Œ í—ˆìš© (one or more)
 	;
 
-WS : [ \t\r\n]+ -> skip ; 														//°ø¹é,ÅÇ,¿£ÅÍ °ª ¹«½ÃÇÔ
+WS : [ \t\r\n]+ -> skip ; 								//ê³µë°±,íƒ­,ì—”í„° ê°’ toss
 
