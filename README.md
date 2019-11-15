@@ -13,11 +13,12 @@
 
 
 ### 소스코드
-WHILE.g4: 계산식을 해석하는 구문분석기
+* WHILE.g4: 계산식을 해석하는 구문분석기
+* Interpreger.java : 계산식을 입력받아 결과를 내는 계산기(메인 클래스)
 
 ### 결과
-*계산결과
-![result](/img/antlr4_calc_result.png)
+*계산결과  
+![result](/img/antlr4_calc_result.PNG)
 
-*AST
+*AST  
 ![AST](/img/antlr4_parse_tree.png)
