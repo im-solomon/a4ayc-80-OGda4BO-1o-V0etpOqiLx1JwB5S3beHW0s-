@@ -1,5 +1,5 @@
 /**
- * Define a grammar called Hello
+ * Define a grammar called WHILE
  */
 grammar WHILE;
 
