@@ -16,3 +16,8 @@
 WHILE.g4: 계산식을 해석하는 구문분석기
 
 ### 결과
+*계산결과
+![result](/img/antlr4_calc_result.png)
+
+*AST
+![AST](/img/antlr4_parse_tree.png)
