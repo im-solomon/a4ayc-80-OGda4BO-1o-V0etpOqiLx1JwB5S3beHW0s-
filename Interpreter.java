@@ -2,16 +2,16 @@ package generated;
 import org.antlr.v4.runtime.*;
 import java.util.*;
 
-class StateMap {																				//state ÀúÀå Å¬·¡½º
+class StateMap {															//state ì €ì¥ í´ë˜ìŠ¤
 	private static HashMap<String, Integer> stateMapVar = new HashMap<String, Integer>();		
-	public StateMap(){																			//state ÃÊ±â°ª
+	public StateMap(){														//state ì´ˆê¸°ê°’
 		stateMapVar.put("x", 7);
 		stateMapVar.put("y", 1);
 	}
-	public void SetState(String strVar, Integer intVar) {										//state key value ¼¼ÆÃ
+	public void SetState(String strVar, Integer intVar) {										//state key value ì„¸íŒ…
 		stateMapVar.put(strVar, intVar);
 	}
-	public HashMap<String, Integer> GetStateMapObject(){										//state °´Ã¼ ¸®ÅÏ
+	public HashMap<String, Integer> GetStateMapObject(){										//state ê°ì²´ ë¦¬í„´
 		return stateMapVar;
 	}
 }
@@ -19,38 +19,38 @@ class StateMap {																				//state ÀúÀå Å¬·¡½º
 public class Interpreter {	
     
 	public static void main(String[] args) throws Exception {
-    	StateMap vars =  new StateMap();																//state °´Ã¼ »ı¼º
-    	System.out.println("°è»ê±â ½ÃÀÛ");
+    	StateMap vars =  new StateMap();												//state ê°ì²´ ìƒì„±
+    	System.out.println("ê³„ì‚°ê¸° ì‹œì‘");
     	while(true) {	
-    		System.out.println("¹øÈ£ ¼±ÅÃ,   1.State Ãâ·Â   2.State ÀÔ·Â   3.¼ö½Ä°è»ê   4.Á¾·á");
+    		System.out.println("ë²ˆí˜¸ ì„ íƒ,   1.State ì¶œë ¥   2.State ì…ë ¥   3.ìˆ˜ì‹ê³„ì‚°   4.ì¢…ë£Œ");
     	
     		int num = new Scanner(System.in).nextInt();	
     		if(num == 1) {
-    			System.out.println("ÇöÀç States:");
-    			for(String key : vars.GetStateMapObject().keySet()) {									//¸ğµç state key value Ãâ·Â
+    			System.out.println("í˜„ì¬ States:");
+    			for(String key : vars.GetStateMapObject().keySet()) {								//ëª¨ë“  state key value ì¶œë ¥
     				System.out.println("key=value: "+key + " = "+vars.GetStateMapObject().get(key));	
     			}
     			
     			System.out.println();
-    		}else if(num == 2){																			//state »ı¼º ¹× substitute
+    		}else if(num == 2){													//state ìƒì„± ë° substitute
     			
-    			System.out.println("State ÀÔ·Â:");
+    			System.out.println("State ì…ë ¥:");
     			System.out.println("State key:");
     			String key = new Scanner(System.in).nextLine();
     			System.out.println("State value:");
     			Integer value = new Scanner(System.in).nextInt();
     			vars.SetState(key, value);
     			
-    		}else if(num == 3){																			//¼ö½Ä °è»ê
-    			System.out.println("¼ö½Ä ÀÔ·Â:");
-    			CharStream input = CharStreams.fromString(new Scanner(System.in).nextLine());			//¼ö½ÄÀ» ¹®ÀÚ¿­·Î ¹ŞÀ½
-    			WHILELexer lexer = new WHILELexer(input);												//¹®ÀÚ¿­À» lexer rule ±âÁØÀ¸·Î ³ª´®
-    			CommonTokenStream tokens = new CommonTokenStream(lexer);								//ÀÇ¹ÌÀÖ´Â ´Ü¾î¸¦ ±âÁØ ÃÖ¼Ò´ÜÀ§·Î ³ª´®				
-    			WHILEParser parser = new WHILEParser(tokens);											//parser rule ±âÁØÀ¸·Î ast¸¦ »ı¼ºÇÑ´Ù
+    		}else if(num == 3){													//ìˆ˜ì‹ ê³„ì‚°
+    			System.out.println("ìˆ˜ì‹ ì…ë ¥:");
+    			CharStream input = CharStreams.fromString(new Scanner(System.in).nextLine());					//ìˆ˜ì‹ì„ ë¬¸ìì—´ë¡œ ë°›ìŒ
+    			WHILELexer lexer = new WHILELexer(input);									//ë¬¸ìì—´ì„ lexer rule ê¸°ì¤€ìœ¼ë¡œ ë‚˜ëˆ”
+    			CommonTokenStream tokens = new CommonTokenStream(lexer);							//ì˜ë¯¸ìˆëŠ” ë‹¨ì–´ë¥¼ ê¸°ì¤€ ìµœì†Œë‹¨ìœ„ë¡œ ë‚˜ëˆ”				
+    			WHILEParser parser = new WHILEParser(tokens);									//parser rule ê¸°ì¤€ìœ¼ë¡œ astë¥¼ ìƒì„±í•œë‹¤
             
-    			parser.memory.putAll(vars.GetStateMapObject());											//parserÀÇ ¸â¹ö°´Ã¼¿¡ state °´Ã¼ Àü´Ş
+    			parser.memory.putAll(vars.GetStateMapObject());									//parserì˜ ë©¤ë²„ê°ì²´ì— state ê°ì²´ ì „ë‹¬
     			
-    			System.out.println(parser.program().aexpr().sv);										//ÃÖÁ¾ °á°úÀÎ ¸®ÅÏ °ª Ãâ·Â
+    			System.out.println(parser.program().aexpr().sv);								//ìµœì¢… ê²°ê³¼ì¸ ë¦¬í„´ ê°’ ì¶œë ¥
     			System.out.println();
     			
     		}else {
