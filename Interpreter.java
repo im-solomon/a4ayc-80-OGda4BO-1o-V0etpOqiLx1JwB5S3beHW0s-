@@ -48,15 +48,15 @@ public class Interpreter {
     			
     		}else if(num == 3){													//수식 계산
     			System.out.println("수식 입력:");
-    			CharStream input = CharStreams.fromString(new Scanner(System.in).nextLine());					//수식을 문자열로 받음
+    			CharStream input = CharStreams.fromString(new Scanner(System.in).nextLine());					//수식을 캐릭터 단위로 쪼갬
     			WHILELexer lexer = new WHILELexer(input);									//문자열을 lexer rule 기준으로 나눔
-    			CommonTokenStream tokens = new CommonTokenStream(lexer);							//의미있는 단어를 기준 최소단위로 나눔				
-    			WHILEParser parser = new WHILEParser(tokens);									//parser rule 기준으로 ast를 생성한다
+    			CommonTokenStream tokens = new CommonTokenStream(lexer);							//의미있는 단어들을 토큰으로 변환함				
+    			WHILEParser parser = new WHILEParser(tokens);									//parser rule 기준으로 ast를 생성
     			parser.memory.putAll(vars.GetStateMapObject());									//parser의 멤버객체에 state 객체 전달
     			
     			ProgramContext parse_program= parser.program();									//입력된 구문 해석
     			System.out.println(parse_program.sv);										//최종 리턴 값 출력
-    			ParseTree tree = parse_program;											//입력된 수식이 해석 되는 트리 생성
+    			ParseTree tree = parse_program;											//AST 생성
     			Trees.inspect(tree,parser);											//가시적인 트리 생성
     			System.out.println();
     			
